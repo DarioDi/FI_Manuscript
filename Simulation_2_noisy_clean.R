@@ -6,6 +6,7 @@ library(rootSolve)
 library(mgcv)
 library(dplyr)
 library(tibbletime)
+library(beepr)
 
 source("helper_functions.R")
 source("model_parameters_2.R")
@@ -18,7 +19,7 @@ set.seed(10)
 
 sim2_parameter = expand.grid(obs_error = seq(0.00, 0.3, length.out = 7),
                              rate_of_change = seq(-0.0002, -0.0011, length.out = 10),
-                             replicate = 1:10)
+                             replicate = 1:100)
 
 sim2_parameter$replicate <- 1:nrow(sim2_parameter)
 
@@ -70,6 +71,8 @@ for(i in seq_len(length.out = n_sim2)){
   
 }
 
+beep(sound = 8)
+
 #table for simulation data collected
 
 View(sim2_parameter)
@@ -85,6 +88,8 @@ sim2_parameter_summary = sim2_parameter %>%
             regime_shift_time_mean = mean(regime_shift_time),
             fisher_diff_mean = mean(regime_shift_time-sim_fisher_min),
             fisher_log_diff_mean = mean(regime_shift_time-sim_log_fisher_min))
+
+View(sim1_parameter_summary)
 
 #plot the difference between fisher information and the regime shift
 
@@ -106,3 +111,4 @@ ggplot(sim2_parameter_summary, aes(y = obs_error, x = rate_of_change,
   geom_tile()+
   scale_fill_gradient2()
 
+beep(sound = 8)
